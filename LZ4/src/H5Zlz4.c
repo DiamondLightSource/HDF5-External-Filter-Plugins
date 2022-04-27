@@ -76,7 +76,7 @@ static size_t H5Z_filter_lz4(unsigned int flags, size_t cd_nelmts,
         if(blockSize>origSize)
             blockSize = origSize;
 
-        if (NULL==(outBuf = H5allocate_memory(origSize, false)))
+        if (NULL==(outBuf = H5allocate_memory(origSize, 0)))
         {
             printf("error calling H5allocate_memory\n");
             goto error;
@@ -100,13 +100,13 @@ static size_t H5Z_filter_lz4(unsigned int flags, size_t cd_nelmts,
             else /* do the decompression */
             {
 #if LZ4_VERSION_NUMBER > 10300
-                int compressedBytes = LZ4_decompress_fast(rpos, roBuf, blockSize);
+                int decompressedBytes = LZ4_decompress_safe(rpos, roBuf, compressedBlockSize, blockSize);
 #else
-                int compressedBytes = LZ4_uncompress(rpos, roBuf, blockSize);
+                int decompressedBytes = LZ4_uncompress(rpos, roBuf, blockSize);
 #endif
-                if(compressedBytes != compressedBlockSize)
+                if(decompressedBytes != blockSize)
                 {
-                    printf("decompressed size not the same: %d, != %d\n", compressedBytes, compressedBlockSize);
+                    printf("decompressed size not the same: %d, != %d\n", decompressedBytes, blockSize);
                     goto error;
                 }
             }
@@ -152,7 +152,7 @@ static size_t H5Z_filter_lz4(unsigned int flags, size_t cd_nelmts,
         }
         nBlocks = (nbytes-1)/blockSize +1;
         maxDestSize = nBlocks * LZ4_compressBound(blockSize) + 4 + 8 + nBlocks*4;
-        outBuf = H5allocate_memory(maxDestSize, false);
+        outBuf = H5allocate_memory(maxDestSize, 0);
         if (NULL == outBuf)
         {
             goto error;
