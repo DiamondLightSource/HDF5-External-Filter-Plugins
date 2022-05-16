@@ -1,0 +1,73 @@
+# -*- sh -*-
+
+# Assume hdf5 is installed, and also lz4, lzf, zstd, c-blosc libraries are available
+
+MY?=
+H5?=
+
+ifndef PLAT_OS
+PLAT_OS=linux
+endif
+
+ifndef GLOBAL_CFLAGS
+GLOBAL_CFLAGS=-fPIC -O3 -m64 -msse4 -mavx2 # at least Intel Haswell or AMD Excavator (4th gen Bulldozer)
+endif
+
+ifeq ($(PLAT_OS),macos)
+LIBEXT=dylib
+else ifeq ($(PLAT_OS),win32)
+LIBEXT=dll
+else
+LIBEXT=so
+endif
+
+BS_DIR=bitshuffle.git/src
+BS_OBJ=$(BS_DIR)/bitshuffle.o $(BS_DIR)/bitshuffle_core.o $(BS_DIR)/bshuf_h5filter.o $(BS_DIR)/bshuf_h5plugin.o $(BS_DIR)/iochain.o
+BS_VER=0.4
+BS_LIB=libh5bslz4.$(LIBEXT)
+
+LZF_DIR=bitshuffle.git/lzf
+LZF_OBJ=$(LZF_DIR)/lzf_filter.o
+LZF_VER=1.4
+LZF_LIB=libh5lzf.$(LIBEXT)
+
+LZ4_DIR=LZ4/src
+LZ4_OBJ=$(LZ4_DIR)/H5Zlz4.o $(LZ4_DIR)/lz4_h5plugin.o
+LZ4_VER=0.1
+LZ4_LIB=libh5lz4.$(LIBEXT)
+
+BLOSC_DIR=BLOSC/src
+BLOSC_OBJ=$(BLOSC_DIR)/H5Zblosc.o
+BLOSC_VER=1.0.0
+BLOSC_LIB=libh5blosc.$(LIBEXT)
+
+
+CFLAGS:=$(GLOBAL_CFLAGS) -DZSTD_SUPPORT -std=gnu99 -I$(MY)/include -I$(H5)/include -I$(LZF_DIR)
+LDFLAGS:=-L$(MY)/lib -L$(H5)/lib -lhdf5
+ifeq ($(PLAT_OS),win32)
+#CFLAGS+=-D_WIN32
+LDFLAGS+=-lws2_32
+endif
+
+all::$(BS_LIB) $(LZF_LIB) $(LZ4_LIB) $(BLOSC_LIB)
+
+
+$(BS_LIB): $(BS_OBJ)
+	$(CC) -shared -o $@ $(CFLAGS) $^ $(LDFLAGS) -llz4 -lzstd
+
+$(LZ4_LIB): $(LZ4_OBJ)
+	$(CC) -shared -o $@ $(CFLAGS) $^ $(LDFLAGS) -llz4
+
+$(LZF_LIB): $(LZF_OBJ)
+	$(CC) -shared -o $@ $(CFLAGS) $^ $(LDFLAGS) -llzf
+
+$(BLOSC_LIB): $(BLOSC_OBJ)
+	$(CC) -shared -o $@ $(CFLAGS) $^ $(LDFLAGS) -lblosc -lzstd -llz4 -lz -lpthread
+
+install:
+	$(INSTALL) $(BS_LIB) $MY/lib
+
+clean:
+	rm -f $(BS_OBJ) $(LZ4_OBJ) $(LZF_OBJ) $(BLOSC_OBJ)
+	rm -f $(BS_LIB) $(LZ4_LIB) $(LZF_LIB) $(BLOSC_LIB)
+
