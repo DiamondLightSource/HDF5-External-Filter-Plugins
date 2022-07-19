@@ -2,7 +2,11 @@
 set -e -x
 
 PATH=$H5/bin:$PATH
-export LD_LIBRARY_PATH=$H5/lib:$LD_LIBRARY_PATH
+if [ $PLAT_OS == "macos" ]; then
+    export DYLD_LIBRARY_PATH=$H5/lib:$DYLD_LIBRARY_PATH
+else
+    export LD_LIBRARY_PATH=$H5/lib:$LD_LIBRARY_PATH
+fi
 export HDF5_PLUGIN_PATH=$(realpath -L $PWD/..)
 
 CODECS="zlib lz4 bs blosc lzf"
