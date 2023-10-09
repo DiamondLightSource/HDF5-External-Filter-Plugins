@@ -9,7 +9,10 @@ else
 fi
 export HDF5_PLUGIN_PATH=$(realpath -L $PWD/..)
 
-CODECS="zlib lz4 bs blosc lzf"
+CODECS="zlib lz4 bs blosc"
+if [ ! "$SKIP_LZF" == "yes" ]; then
+ CODECS+=" lzf"
+fi
 
 if [ -z "$CC" ]; then
   CC=cc
