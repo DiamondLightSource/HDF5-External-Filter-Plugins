@@ -29,9 +29,14 @@ for c in $CODECS; do
   fi
 done
 
+H5_TOOL_SUFFIX=""
+if [ -x "$H5/bin/h5diff-shared" ]; then
+  H5_TOOL_SUFFIX="-shared"
+fi
+  
 for i in test*.h5; do
   echo "Checking $i"
-  h5diff -q raw.h5 $i || (echo "$i does not match raw.h5" && h5dump -p -A $i)
+  "h5diff$H5_TOOL_SUFFIX" -q raw.h5 $i || (echo "$i does not match raw.h5" && "h5dump$H5_TOOL_SUFFIX" -p -A $i)
 done
 
 if [ -n "$FAILURES" ]; then
