@@ -176,8 +176,8 @@ size_t H5Z_filter_blosc(unsigned flags, size_t cd_nelmts,
     int doshuffle = 1;             /* Shuffle default */
     int compcode;                  /* Blosc compressor */
     int code;
-    char *compname = NULL;
-    char *complist;
+    const char *compname = NULL;
+    const char *complist;
     char errmsg[256];
 
     /* Filter params that are always set */
