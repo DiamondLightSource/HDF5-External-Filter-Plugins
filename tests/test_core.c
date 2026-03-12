@@ -10,7 +10,7 @@
 #define MAX_SHAPE {-1,128,256}
 #define CHUNK_SHAPE {1,128,256}
 
-int testfilter(char *file_prefix, int shuffle, int filter, int param_no, int *params) {
+int testfilter(char *file_prefix, int shuffle, int filter, int param_no, unsigned int *params) {
 
     static float data[SIZE];
     static float data_out[SIZE];

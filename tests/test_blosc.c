@@ -5,13 +5,13 @@
 #include <stdlib.h>
 #include "hdf5.h"
 
-int testfilter(char *filename, int shuffle, int filter, int param_no, int *params);
+int testfilter(char *filename, int shuffle, int filter, int param_no, unsigned int *params);
 
 #define MY_H5Z_FILTER 32001
 
 int main() {
     int return_code = 1;
-    int all_compression_opt[][7] = {
+    unsigned int all_compression_opt[][7] = {
     {0, 0, 0, 0, 5, 0, 0}, {0, 0, 0, 0, 5, 1, 0}, {0, 0, 0, 0, 5, 2, 0}, // blosclz
     {0, 0, 0, 0, 5, 0, 1}, {0, 0, 0, 0, 5, 1, 1}, {0, 0, 0, 0, 5, 2, 1}, // lz4
 //    {0, 0, 0, 0, 5, 0, 2}, {0, 0, 0, 0, 5, 1, 2}, {0, 0, 0, 0, 5, 2, 2}, // lz4hc
