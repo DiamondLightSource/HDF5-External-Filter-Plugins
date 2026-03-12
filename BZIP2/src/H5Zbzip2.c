@@ -67,7 +67,7 @@ static size_t H5Z_filter_bzip2(unsigned int flags, size_t cd_nelmts,
 #define H5Z_FILTER_BZIP2 307
 
 const H5Z_class2_t H5Z_BZIP2[1] = {{
-    H5Z_CLASS_T_VERS,       /* H5Z_class_t version */
+    H5Z_class_t_vers,       /* H5Z_class_t version */
     (H5Z_filter_t)H5Z_FILTER_BZIP2,         /* Filter id number             */
     1,              /* encoder_present flag (set to true) */
     1,              /* decoder_present flag (set to true) */

@@ -194,7 +194,7 @@ size_t bshuf_h5_filter(unsigned int flags, size_t cd_nelmts,
 
 
 H5Z_class2_t bshuf_H5Filter[1] = {{
-    H5Z_CLASS_T_VERS,
+    H5Z_class_t_vers,
     (H5Z_filter_t)(BSHUF_H5FILTER),
     1, 1,
     "bitshuffle; see https://github.com/kiyo-masui/bitshuffle",

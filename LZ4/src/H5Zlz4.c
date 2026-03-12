@@ -41,7 +41,7 @@ static size_t H5Z_filter_lz4(unsigned int flags, size_t cd_nelmts,
 #define DEFAULT_BLOCK_SIZE 1<<30; /* 1GB. LZ4 needs blocks < 1.9GB. */
 
 const H5Z_class2_t H5Z_LZ4[1] = {{
-        H5Z_CLASS_T_VERS,       /* H5Z_class_t version */
+        H5Z_class_t_vers,       /* H5Z_class_t version */
         (H5Z_filter_t)H5Z_FILTER_LZ4,         /* Filter id number             */
         1,              /* encoder_present flag (set to true) */
         1,              /* decoder_present flag (set to true) */

@@ -11,7 +11,6 @@
  */
 
 
-#define H5Z_class_t_vers 2
 #include "lzf_filter.h"
 #include "H5PLextern.h"
 
@@ -26,8 +25,8 @@ size_t lzf_filter(unsigned flags, size_t cd_nelmts,
 herr_t lzf_set_local(hid_t dcpl, hid_t type, hid_t space);
 
 
-H5Z_class_t lzf_H5Filter[1] = {{
-    H5Z_CLASS_T_VERS,
+H5Z_class2_t lzf_H5Filter[1] = {{
+    H5Z_class_t_vers,
     (H5Z_filter_t)(H5PY_FILTER_LZF),
     1, 1,
     "lzf",
